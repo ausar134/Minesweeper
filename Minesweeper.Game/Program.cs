@@ -16,8 +16,8 @@ namespace Minesweeper
         private const int borderSize = 4;
         private const int borderWidth = maxWidth - borderSize;
         private const int borderHeight = maxHeight - borderSize;
-        private const int cursorStartingPosX = 5;
-        private const int cursorStartingPosY = 5;
+        private const int cursorStartingPosX = 6;
+        private const int cursorStartingPosY = 6;
         private const char playableAreaHorizontalSymbol = '─';
         private const char playableIntersectionSymbol = '┼';
         private const char playableLeftCross = '├';
@@ -27,6 +27,8 @@ namespace Minesweeper
 		private const char playableAreaVerticalSymbol = '│';
         private const char cursorSymbol = 'O';
         private const char bombSymbol = 'X';
+
+        private const int MaxBombs = 50;
 
         static void Main(string[] args)
         {
@@ -39,29 +41,33 @@ namespace Minesweeper
         {
             ConsoleHelpers.DrawBorder(borderSize);
             DrawPlayableArea();
-            GenerateBombs();
+            GenerateBombs(MaxBombs);
             Console.SetCursorPosition(cursorStartingPosX, cursorStartingPosY);
         }
 
         public static void DrawPlayableArea()
         {
-	        for (var j = borderSize+1; j < borderHeight; j+=2)
+	        for (var i = borderSize + 1; i < borderHeight; i++)
 	        {
-		        for (var i = borderSize+1; i < borderWidth; i++)
+		        for (var j = borderSize + 1; j < borderWidth; j++)
 		        {
-			        Console.SetCursorPosition(i, j);
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.Write(playableAreaHorizontalSymbol);
-				}
-	        }
-
-	        for (var i = borderSize + 1; i < borderWidth; i += 2)
-	        {
-		        for (var j = borderSize + 1; j < borderHeight; j++)
-		        {
-			        Console.SetCursorPosition(i, j);
+			        Console.SetCursorPosition(j, i);
 			        Console.ForegroundColor = ConsoleColor.Red;
-			        Console.Write(playableAreaVerticalSymbol);
+
+					if (i % 2 == 0 && j % 2 == 0)
+			        {
+				        continue;
+			        }
+
+			        if (i % 2 != 0)
+			        {
+				        Console.Write(playableAreaHorizontalSymbol);
+					}
+
+			        if (j % 2 != 0)
+			        {
+				       Console.Write(playableAreaVerticalSymbol);
+					}
 		        }
 	        }
         }
@@ -126,20 +132,18 @@ namespace Minesweeper
             }
         }
 
-        public static void GenerateBombs()
+        public static void GenerateBombs(int bombCount)
         {
-            Random bombGenerator = new Random();
-            int bombCount = 0;
-            int bombAmountMin = 10;
-            int bombAmountMax = 50;
+            var bombGenerator = new Random();
+            const int currentBombs = 0;
 
-            for (int i = bombCount; i < bombAmountMax; i++) 
+            for (var i = currentBombs; i < bombCount; i++) 
             {
                     var bombX= bombGenerator.Next(borderSize, borderWidth-1);
                     var bombY = bombGenerator.Next(borderSize, borderHeight-1);
 
-                var isOnVerticalBorder = bombX % borderSize == 0;
-                var isOnHorizontalBorder = bombY % borderSize == 0;
+                var isOnVerticalBorder = bombX % 2 == 1;
+                var isOnHorizontalBorder = bombY % 2 == 1;
 
                 if (!isOnVerticalBorder && !isOnHorizontalBorder)
                 {
