@@ -1,8 +1,0 @@
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\bin\Debug\netstandard2.0\Console.Common.deps.json
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\bin\Debug\netstandard2.0\Console.Common.dll
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\bin\Debug\netstandard2.0\Console.Common.pdb
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\obj\Debug\netstandard2.0\Console.Common.csprojAssemblyReference.cache
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\obj\Debug\netstandard2.0\Console.Common.AssemblyInfoInputs.cache
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\obj\Debug\netstandard2.0\Console.Common.AssemblyInfo.cs
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\obj\Debug\netstandard2.0\Console.Common.dll
-C:\Users\Aggelos\source\repos\Minesweeper\Console.Common\obj\Debug\netstandard2.0\Console.Common.pdb
