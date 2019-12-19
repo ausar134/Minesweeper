@@ -18,17 +18,20 @@ namespace Minesweeper
 		private const int borderHeight = maxHeight - borderSize;
 		private const int cursorStartingPosX = 6;
 		private const int cursorStartingPosY = 6;
+
 		private const char playableAreaHorizontalSymbol = '─';
 		private const char playableAreaVerticalSymbol = '│';
 		private const char cursorSymbol = 'O';
 		private const char bombSymbol = 'X';
+
 		private static Point[] bombPos = new Point[MaxBombs];
-		private static Point[] gameCells = new Point[(maxWidth-1) / 2]; 
+        private static int[,] gameCells = new int[borderHeight, borderWidth]; 
 		private const int MaxBombs = 50;
 
 		static void Main(string[] args)
-		{ 
-			OnInit();
+		{
+            Console.CursorVisible = false;
+            OnInit();
 			CursorMovement();
 		}
 
@@ -37,7 +40,8 @@ namespace Minesweeper
 			ConsoleHelpers.DrawBorder(borderSize);
 			DrawPlayableArea();
 			GenerateBombs(bombPos, MaxBombs);
-			Console.SetCursorPosition(cursorStartingPosX, cursorStartingPosY);
+            CheckCellElement(gameCells);
+            Console.SetCursorPosition(cursorStartingPosX, cursorStartingPosY);
 		}
 
 		public static void DrawPlayableArea()
@@ -88,7 +92,7 @@ namespace Minesweeper
 
 					switch (key.Key)
 					{
-						case ConsoleKey.LeftArrow when (cursorPosX > borderSize + 1):
+						case ConsoleKey.LeftArrow when (cursorPosX > borderSize + 2):
 							Console.SetCursorPosition(cursorPosX, cursorPosY);
 							Console.Write(" ");
 							movementX = -2;
@@ -100,22 +104,23 @@ namespace Minesweeper
 							movementX = +2;
 							cursorPosX += movementX;
 							break;
-						case ConsoleKey.UpArrow when (cursorPosY > borderSize + 1):
+						case ConsoleKey.UpArrow when (cursorPosY > borderSize + 2):
 							Console.SetCursorPosition(cursorPosX, cursorPosY);
 							Console.Write(" ");
 							movementY = -2;
 							cursorPosY += movementY;
 							break;
-						case ConsoleKey.DownArrow when (cursorPosY < borderHeight - 1):
+						case ConsoleKey.DownArrow when (cursorPosY < borderHeight - 2):
 							Console.SetCursorPosition(cursorPosX, cursorPosY);
 							Console.Write(" ");
 							movementY = +2;
 							cursorPosY += movementY;
 							break;
 						case ConsoleKey.Spacebar:
+                            CheckCellElement(gameCells);
 							Console.SetCursorPosition(cursorPosX, cursorPosY);
-							Console.ForegroundColor = ConsoleColor.Yellow;
-							Console.Write(cursorSymbol);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write(cursorSymbol);
 							break;
 						default:
 							break;
@@ -131,23 +136,41 @@ namespace Minesweeper
 		public static void GenerateBombs(Point[] bombPos, int bombCount)
 		{
 			var bombGenerator = new Random();
+            int bombMin = 0;
 
-			for (var i = 0; i < bombCount; i++)
-			{
-				var bombX = bombGenerator.Next(borderSize + 1, borderWidth - 1);
-				var bombY = bombGenerator.Next(borderSize + 1, borderHeight - 1);
+            while (bombMin < bombCount)
+            {
+                for (var i = bombMin; i < bombCount; i++)
+                {
+                    var bombX = bombGenerator.Next(borderSize + 1, borderWidth - 1);
+                    var bombY = bombGenerator.Next(borderSize + 1, borderHeight - 1);
 
-				var isOnVerticalBorder = bombX % 2 == 1;
-				var isOnHorizontalBorder = bombY % 2 == 1;
-				
-				if (!isOnVerticalBorder && !isOnHorizontalBorder)
-				{
-					Console.SetCursorPosition(bombX, bombY); 
-					bombPos[i].X = bombX; 
-					bombPos[i].Y = bombY;
-					Console.Write(bombSymbol);
-				}
-			}
-		}
+                    var isOnVerticalBorder = bombX % 2 == 1;
+                    var isOnHorizontalBorder = bombY % 2 == 1;
+
+                    if (!isOnVerticalBorder && !isOnHorizontalBorder)
+                    {
+                        Console.SetCursorPosition(bombX, bombY);
+                        bombPos[i].X = bombX;
+                        bombPos[i].Y = bombY;
+                        bombMin += 1;
+                    }
+                }
+            }
+        }
+
+        public static void CheckCellElement(int[,] gameCells)
+        {
+            for (int i = 0; i < borderHeight; i++)
+            {
+                for (int j = 0; j < borderWidth; j++)
+                {
+                    if (gameCells[i, j] == bombSymbol)
+                    {
+                        
+                    }
+                }
+            }
+        }
 	}
 }
